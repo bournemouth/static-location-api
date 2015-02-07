@@ -1,6 +1,10 @@
-# Bournemouth Open Data API
+# Bournemouth Transport Static Location API
 Based on HAL JSON resources http://stateless.co/hal_specification.html
 
+Intended to provide a resource for finding static locations/nodes for transport - including taxi ranks, bus stops, car parks, etc.
+
+# API Access
+Available at [bmth-loc-api.vdtapp.com/](http://bmth-loc-api.vdtapp.com/)
 
 # Setup
 1. [Install composer](https://getcomposer.org/download) `curl -sS https://getcomposer.org/installer | php`
