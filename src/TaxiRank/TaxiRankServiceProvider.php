@@ -12,29 +12,32 @@ class TaxiRankServiceProvider implements ServiceProviderInterface
     {
         $app['db.taxiRanks'] = $app->share(
             function () {
-                $csv = array_map("str_getcsv", file(__DIR__.'/../../database/taxi-ranks.csv', FILE_SKIP_EMPTY_LINES));
+                $csv = array_map("str_getcsv", file(__DIR__ . '/../../database/taxi-ranks.csv', FILE_SKIP_EMPTY_LINES));
                 $keys = array_shift($csv);
 
-                    array_push($keys, 'id');
+                array_push($keys, 'id');
 
                 $numRows = count($csv);
                 foreach ($csv as $i => $row) {
-
                     $row[$numRows] = $i;
                     $csv[$i] = array_combine($keys, $row);
                 }
 
-                foreach ($csv as &$c) {
-                    $c['lat'] = (double) $c['lat'];
-                    $c['lng'] = (double) $c['lng'];
-                }
+                $taxiRankCollection = array_map(function (array $row) {
+                    return new TaxiRank(
+                        $row['id'],
+                        $row['name'],
+                        $row['Restriction_Description'],
+                        $row['lat'],
+                        $row['lng']
+                    );
+                }, $csv);
 
-
-                return $csv;
+                return $taxiRankCollection;
             }
         );
 
-        $app['taxiRank.controller'] = $app->share(function(Application $app) {
+        $app['taxiRank.controller'] = $app->share(function (Application $app) {
             return new TaxiRankController($app);
         });
     }
