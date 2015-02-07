@@ -25,7 +25,7 @@ $app['db.taxiRanks'] = $app->share(
 
         foreach ($csv as &$c) {
             $c['lat'] = (double) $c['lat'];
-            $c['lat'] = (double) $c['lat'];
+            $c['lng'] = (double) $c['lng'];
         }
 
 
