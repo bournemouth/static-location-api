@@ -1,4 +1,4 @@
-Order_type,Street_name,Restriction_Description,Lat_Start,Lon_Start,Lat_End,Lon_End,Side_of_Road,start,finish,,
+Order_type,Street_name,Restriction_Description,lat,lng,Lat_End,Lon_End,Side_of_Road,start,finish,,
 Taxi Rank,ADELINE ROAD,Waiting prohibited at any time except for Hackney Carriages,50.725194,-1.843286,,,eastern,from a point 12 metres south of its junction with Christchurch Road,to a point 27 metres south of its junction with Christchurch Road,,
 Taxi Rank,BATH ROAD (IMAX LAY-BY),Waiting prohibited at any time except for Hackney Carriages midnight-5.30am and 11.30pm-midnight,50.716987,-1.874077,,,southeastern,the whole length of the lay-by adjacent to the Bath Hill South Car Park,,,
 Taxi Rank,BEALE PLACE,Waiting prohibited at any time except for Hackney Carriages,50.720585,-1.876383,,,southwestern,from the extended south-eastern boundary of Nos. 44 to 50 Old Christchurch Road,for a distance of 10 metres in a south-easterly direction,,
