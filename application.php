@@ -9,18 +9,19 @@ $app = new Silex\Application;
 $app['debug'] = true;
 $app->register(new Silex\Provider\ServiceControllerServiceProvider());
 
-$app['db.taxiRanks'] = $app->share(
-    function () {
-        return [
-            1 => [
-                'id' => 1,
-                'name' => 'Test',
-                'lat' => 0.0,
-                'lng' => 0.0
-            ]
-        ];
+$app['csvParser'] = $app->protect(
+    function ($csvFile) {
+        $csv = array_map("str_getcsv", file($csvFile, FILE_SKIP_EMPTY_LINES));
+        $keys = array_shift($csv);
+
+        foreach ($csv as $i=>$row) {
+            $csv[$i] = array_combine($keys, $row);
+        }
+
+        return $csv;
     }
 );
+
 
 $app->get(
     '/',
@@ -36,13 +37,12 @@ $app->get(
     }
 );
 
-
 $app->get(
     '/api/v1',
-    function () {
+    function () use ($app){
         $apiResource = new \Nocarrier\Hal();
         $taxiRankResource = new \Nocarrier\Hal(
-            '/api/v1/taxi-ranks',
+            '/api/v1/'.$app['taxiRank.controller']::getBaseRoute,
             [
                 'name' => 'Bournemouth Taxi Rank Locations',
                 'description' => 'Provides the locations of all the taxi ranks in Bournemouth'
@@ -59,12 +59,17 @@ $app->get(
 
 
 $app['taxiRank.controller'] = $app->share(function(Silex\Application $app) {
-    return new BournemouthData\TaxiRank\TaxiRankController($app);
+    return new BournemouthData\TaxiRank\TaxiRankController(
+        $app,
+        new BournemouthData\TaxiRank\TaxiRankRepository($app, 'database/taxi-ranks.csv'),
+        'taxiRank',
+        'api/v1/taxi-ranks'
+    );
 });
 
 $taxiApi = $app['controllers_factory'];
 $taxiApi->get('/', 'taxiRank.controller:getAll')->bind('taxiRanks');
-$taxiApi->get('/{id}', 'taxiRank.controller:getTaxiRank')->bind('taxiRank');
-$app->mount('/api/v1/taxi-ranks', $taxiApi);
+$taxiApi->get('/{id}', 'taxiRank.controller:getOne')->bind('taxiRank');
+$app->mount('api/v1/taxi-ranks', $taxiApi);
 
 return $app;
