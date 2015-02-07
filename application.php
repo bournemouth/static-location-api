@@ -75,7 +75,7 @@ $app->get(
 $app['taxiRank.controller'] = $app->share(function(Silex\Application $app) {
     return new BournemouthData\TaxiRank\TaxiRankController(
         $app,
-        new BournemouthData\TaxiRank\TaxiRankRepository($app, 'database/taxi-ranks.csv'),
+        new BournemouthData\TaxiRank\TaxiRankRepository($app, __DIR__.'/database/taxi-ranks.csv'),
         'taxiRank',
         'api/v1/taxi-ranks/'
     );
