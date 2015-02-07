@@ -6,32 +6,9 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 $app = new Silex\Application;
-$app['debug'] = true;
+$app['debug'] = getenv('debug');
 $app->register(new Silex\Provider\ServiceControllerServiceProvider());
-
-$app['db.taxiRanks'] = $app->share(
-    function () {
-        $csv = array_map("str_getcsv", file(__DIR__.'/database/taxi-ranks.csv', FILE_SKIP_EMPTY_LINES));
-        $keys = array_shift($csv);
-
-            array_push($keys, 'id');
-
-        $numRows = count($csv);
-        foreach ($csv as $i => $row) {
-
-            $row[$numRows] = $i;
-            $csv[$i] = array_combine($keys, $row);
-        }
-
-        foreach ($csv as &$c) {
-            $c['lat'] = (double) $c['lat'];
-            $c['lng'] = (double) $c['lng'];
-        }
-
-
-        return $csv;
-    }
-);
+$app->register(new BournemouthData\TaxiRank\TaxiRankServiceProvider());
 
 $app['db.coWheels'] = $app->share(
     function () {
@@ -64,7 +41,6 @@ $app->get(
     }
 );
 
-
 $app->get(
     '/api/v1',
     function () {
@@ -94,25 +70,13 @@ $app->get(
     }
 );
 
-
-$app['taxiRank.controller'] = $app->share(function(Silex\Application $app) {
-    return new BournemouthData\TaxiRank\TaxiRankController($app);
-});
-
-$taxiApi = $app['controllers_factory'];
-$taxiApi->get('/', 'taxiRank.controller:getAll')->bind('taxiRanks');
-$taxiApi->get('/{id}', 'taxiRank.controller:getTaxiRank')->bind('taxiRank');
-$app->mount('/api/v1/taxi-ranks', $taxiApi);
-
 $app['coWheels.controller'] = $app->share(function(Silex\Application $app) {
     return new BournemouthData\CoWheels\CoWheelsController($app);
 });
 
 $coWheelsApi = $app['controllers_factory'];
-$coWheelsApi = $app['controllers_factory'];
 $coWheelsApi->get('/', 'coWheels.controller:getAll');
 $coWheelsApi->get('/{id}', 'coWheels.controller:getCarLocation');
 $app->mount('/api/v1/co-wheels', $coWheelsApi);
-
 
 return $app;
