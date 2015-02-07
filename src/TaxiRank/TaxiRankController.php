@@ -2,48 +2,23 @@
 
 namespace BournemouthData\TaxiRank;
 
+use BournemouthData\ResourceController;
+use BournemouthData\TransportRepositoryInterface;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Response;
 
-class TaxiRankController {
+class TaxiRankController extends ResourceController {
 
     /**
      * @param Application $app
+     * @param TransportRepositoryInterface $repository
+     * @param $collectionName
+     * @param $baseRoute
      */
-    public function __construct(Application $app)
+    public function __construct(Application $app, TransportRepositoryInterface $repository, $collectionName, $baseRoute)
     {
-        $this->app = $app;
+        parent::__construct($app, $repository, $collectionName, $baseRoute);
     }
 
-
-    public function getAll()
-    {
-        $taxiRankRecords = $this->app['db.taxiRanks'];
-
-        $taxiRankCollection = new \Nocarrier\Hal('/api/v1/taxi-ranks');
-
-        foreach ($taxiRankRecords as $taxiRank) {
-            $taxiRankResource = new \Nocarrier\Hal('/api/v1/taxi-ranks/' . $taxiRank['id'], $taxiRank);
-            $taxiRankCollection->addResource('taxiRanks', $taxiRankResource);
-        }
-
-        $response = new Response();
-        $response->headers->set('Content-Type', 'application/hal+json');
-        $response->setContent($taxiRankCollection->asJson(true));
-        return $response;
-    }
-
-    public function getTaxiRank()
-    {
-        $id = $this->app['request']->get('id');
-        $taxiRank = $this->app['db.taxiRanks'][$id];
-
-        $taxiRankResource = new \Nocarrier\Hal('/api/v1/taxi-ranks/' . $taxiRank['id'], $taxiRank);
-
-        $response = new Response();
-        $response->headers->set('Content-Type', 'application/hal+json');
-        $response->setContent($taxiRankResource->asJson(true));
-        return $response;
-    }
 
 }
