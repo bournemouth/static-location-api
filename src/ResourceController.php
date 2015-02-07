@@ -35,6 +35,8 @@ abstract class ResourceController {
         $collection = new \Nocarrier\Hal($this->baseRoute);
 
         foreach ($records as $item) {
+            echo '<pre>';print_r($item);exit;
+
             $resource = new \Nocarrier\Hal($this->baseRoute . $item['id'], $item);
             $collection->addResource($this->collectionName, $resource);
         }
