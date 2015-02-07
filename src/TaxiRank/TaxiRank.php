@@ -4,13 +4,13 @@ namespace BournemouthData\TaxiRank;
 
 class TaxiRank
 {
-	private $id;
-	private $name;
-	private $description;
-	private $lat;
-	private $lng;
+    private $id;
+    private $name;
+    private $description;
+    private $lat;
+    private $lng;
 
-	public function __construct($id, $name, $description, $lat, $lng)
+    public function __construct($id, $name, $description, $lat, $lng)
     {
         $this->id = $id;
         $this->name = ucwords(strtolower($name));
