@@ -3,5 +3,10 @@
         "php": ">=5.4",
         "silex/silex": "~1.2",
         "nocarrier/hal": "0.9.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "BournemouthData\\": "src/"
+        }
     }
 }
