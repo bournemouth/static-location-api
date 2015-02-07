@@ -2,6 +2,7 @@
 
 namespace BournemouthData\CoWheels;
 
+use BournemouthData\LocationApi\LocationApiResource;
 use Silex\Application;
 use Silex\ServiceProviderInterface;
 
@@ -33,6 +34,14 @@ class CoWheelsServiceProvider implements ServiceProviderInterface
 
     public function boot(Application $app)
     {
+    	$resource = new LocationApiResource(
+            '/api/v1/co-wheels',
+            'Co-Wheels Vehicle Locations',
+            'Provides the locations of all the co-wheels car sharing vehicles in Bournemouth'
+        );
+
+        $app['locationApi.manager']->register($resource);
+
 		$coWheelsApi = $app['controllers_factory'];
 		$coWheelsApi->get('/', 'coWheels.controller:getAll');
 		$coWheelsApi->get('/{id}', 'coWheels.controller:getCarLocation');

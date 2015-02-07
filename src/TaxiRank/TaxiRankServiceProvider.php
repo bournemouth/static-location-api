@@ -2,6 +2,7 @@
 
 namespace BournemouthData\TaxiRank;
 
+use BournemouthData\LocationApi\LocationApiResource;
 use Silex\Application;
 use Silex\ServiceProviderInterface;
 
@@ -40,6 +41,14 @@ class TaxiRankServiceProvider implements ServiceProviderInterface
 
     public function boot(Application $app)
     {
+    	$resource = new LocationApiResource(
+            '/api/v1/taxi-ranks',
+            'Bournemouth Taxi Rank Locations',
+            'Provides the locations of all the taxi ranks in Bournemouth'
+        );
+
+        $app['locationApi.manager']->register($resource);
+
 		$taxiApi = $app['controllers_factory'];
 		$taxiApi->get('/', 'taxiRank.controller:getAll')->bind('taxiRanks');
 		$taxiApi->get('/{id}', 'taxiRank.controller:getTaxiRank')->bind('taxiRank');
