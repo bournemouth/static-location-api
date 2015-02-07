@@ -22,6 +22,13 @@ $app['db.taxiRanks'] = $app->share(
             $row[$numRows] = $i;
             $csv[$i] = array_combine($keys, $row);
         }
+
+        foreach ($csv as &$c) {
+            $c['lat'] = (double) $c['lat'];
+            $c['lat'] = (double) $c['lat'];
+        }
+
+
         return $csv;
     }
 );
