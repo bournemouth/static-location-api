@@ -15,15 +15,21 @@ class TaxiRankController {
         $this->app = $app;
     }
 
-
     public function getAll()
     {
+        /** @var $taxiRankRecords TaxiRank[] */
         $taxiRankRecords = $this->app['db.taxiRanks'];
 
         $taxiRankCollection = new \Nocarrier\Hal('/api/v1/taxi-ranks');
 
         foreach ($taxiRankRecords as $taxiRank) {
-            $taxiRankResource = new \Nocarrier\Hal('/api/v1/taxi-ranks/' . $taxiRank['id'], $taxiRank);
+            $taxiRankResource = new \Nocarrier\Hal('/api/v1/taxi-ranks/' . $taxiRank->getId(), [
+                'id' => $taxiRank->getId(),
+                'name' => $taxiRank->getName(),
+                'description' => $taxiRank->getDescription(),
+                'lat' => $taxiRank->getLat(),
+                'lng' => $taxiRank->getLng()
+            ]);
             $taxiRankCollection->addResource('taxiRanks', $taxiRankResource);
         }
 
@@ -45,5 +51,4 @@ class TaxiRankController {
         $response->setContent($taxiRankResource->asJson(true));
         return $response;
     }
-
 }
