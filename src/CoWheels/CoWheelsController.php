@@ -26,12 +26,7 @@ class CoWheelsController
 
         foreach ($coWheelsRecords as $coWheelLocation) {
             $resource = new \Nocarrier\Hal(
-                '/api/v1/co-wheels/' . $coWheelLocation->getId(), [
-                    'id' => $coWheelLocation->getId(),
-                    'name' => $coWheelLocation->getName(),
-                    'lat' => $coWheelLocation->getLat(),
-                    'lng' => $coWheelLocation->getLng()
-                ]
+                '/api/v1/co-wheels/' . $coWheelLocation->getId(), $this->serialize($coWheelLocation)
             );
             $coWheelsCollection->addResource('coWheels', $resource);
         }
@@ -45,14 +40,32 @@ class CoWheelsController
     public function getCarLocation()
     {
         $id = $this->app['request']->get('id');
-        $taxiRank = $this->app['db.coWheels'][$id];
 
-        $taxiRankResource = new \Nocarrier\Hal('/api/v1/co-wheels/' . $taxiRank['id'], $taxiRank);
+        /** @var CoWheelLocation[] $coWheelLocation */
+        $coWheelLocation = $this->app['db.coWheels'][$id];
+
+        $taxiRankResource = new \Nocarrier\Hal(
+            '/api/v1/co-wheels/' . $coWheelLocation->getId(), $this->serialize($coWheelLocation)
+        );
 
         $response = new Response();
         $response->headers->set('Content-Type', 'application/hal+json');
         $response->setContent($taxiRankResource->asJson(true));
         return $response;
+    }
+
+    /**
+     * @param CoWheelLocation $coWheelLocation
+     * @return array
+     */
+    private function serialize(CoWheelLocation $coWheelLocation)
+    {
+        return [
+            'id' => $coWheelLocation->getId(),
+            'name' => $coWheelLocation->getName(),
+            'lat' => $coWheelLocation->getLat(),
+            'lng' => $coWheelLocation->getLng()
+        ];
     }
 
 }
