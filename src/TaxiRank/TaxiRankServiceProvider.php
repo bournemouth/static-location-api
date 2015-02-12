@@ -45,6 +45,7 @@ class TaxiRankServiceProvider implements ServiceProviderInterface
     public function boot(Application $app)
     {
         $resource = new LocationApiResource(
+            'taxi-ranks',
             '/api/v1/taxi-ranks',
             'Bournemouth Taxi Rank Locations',
             'Provides the locations of all the taxi ranks in Bournemouth'

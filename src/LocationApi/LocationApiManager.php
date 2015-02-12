@@ -16,10 +16,10 @@ class LocationApiManager
 
     public function register(LocationApiResource $resource)
     {
-        $halResource = new Hal($resource->getUri(),
-            ['name' => $resource->getName(), 'description' => $resource->getDescription()]
+        $this->apiResource->addLink(
+            'resource',
+            $resource->getUri(),
+            ['id' => $resource->getId(), 'name' => $resource->getName(), 'description' => $resource->getDescription(),]
         );
-
-        $this->apiResource->addResource('resources', $halResource);
     }
 }

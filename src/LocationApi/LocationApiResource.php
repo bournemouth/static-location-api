@@ -9,12 +9,19 @@ class LocationApiResource
     private $uri;
     private $name;
     private $description;
+    private $id;
 
-    public function __construct($uri, $name, $description = null)
+    public function __construct($id, $uri, $name, $description = null)
     {
+        $this->id = $id;
         $this->uri = $uri;
         $this->name = $name;
         $this->description = $description;
+    }
+
+    public function getId()
+    {
+        return $this->id;
     }
 
     public function getUri()

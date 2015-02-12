@@ -35,6 +35,7 @@ class CoWheelsServiceProvider implements ServiceProviderInterface
     public function boot(Application $app)
     {
         $resource = new LocationApiResource(
+            'co-wheels',
             '/api/v1/co-wheels',
             'Co-Wheels Vehicle Locations',
             'Provides the locations of all the co-wheels car sharing vehicles in Bournemouth'
