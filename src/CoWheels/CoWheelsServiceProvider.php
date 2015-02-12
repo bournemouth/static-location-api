@@ -56,8 +56,8 @@ class CoWheelsServiceProvider implements ServiceProviderInterface
         $app['locationApi.manager']->register($resource);
 
         $coWheelsApi = $app['controllers_factory'];
-        $coWheelsApi->get('/', 'coWheels.controller:getAll');
-        $coWheelsApi->get('/{id}', 'coWheels.controller:getCarLocation');
-        $app->mount('/api/v1/co-wheels', $coWheelsApi);
+        $coWheelsApi->get('/co-wheels', 'coWheels.controller:getAll');
+        $coWheelsApi->get('/co-wheels/{id}', 'coWheels.controller:getCarLocation');
+        $app->mount('/api/v1', $coWheelsApi);
     }
 }

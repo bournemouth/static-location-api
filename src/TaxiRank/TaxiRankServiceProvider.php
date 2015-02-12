@@ -54,8 +54,8 @@ class TaxiRankServiceProvider implements ServiceProviderInterface
         $app['locationApi.manager']->register($resource);
 
         $taxiApi = $app['controllers_factory'];
-        $taxiApi->get('/', 'taxiRank.controller:getAll')->bind('taxiRanks');
-        $taxiApi->get('/{id}', 'taxiRank.controller:getTaxiRank')->bind('taxiRank');
-        $app->mount('/api/v1/taxi-ranks', $taxiApi);
+        $taxiApi->get('/taxi-ranks', 'taxiRank.controller:getAll')->bind('taxiRanks');
+        $taxiApi->get('/taxi-ranks/{id}', 'taxiRank.controller:getTaxiRank')->bind('taxiRank');
+        $app->mount('/api/v1', $taxiApi);
     }
 }
