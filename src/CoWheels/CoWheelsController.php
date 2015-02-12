@@ -5,7 +5,8 @@ namespace BournemouthData\CoWheels;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Response;
 
-class CoWheelsController {
+class CoWheelsController
+{
 
     /**
      * @param Application $app
@@ -18,18 +19,26 @@ class CoWheelsController {
 
     public function getAll()
     {
-        $taxiRankRecords = $this->app['db.coWheels'];
+        /** @var CoWheelLocation[] $coWheelsRecords */
+        $coWheelsRecords = $this->app['db.coWheels'];
 
-        $taxiRankCollection = new \Nocarrier\Hal('/api/v1/co-wheels');
+        $coWheelsCollection = new \Nocarrier\Hal('/api/v1/co-wheels');
 
-        foreach ($taxiRankRecords as $taxiRank) {
-            $taxiRankResource = new \Nocarrier\Hal('/api/v1/co-wheels/' . $taxiRank['id'], $taxiRank);
-            $taxiRankCollection->addResource('coWheels', $taxiRankResource);
+        foreach ($coWheelsRecords as $coWheelLocation) {
+            $resource = new \Nocarrier\Hal(
+                '/api/v1/co-wheels/' . $coWheelLocation->getId(), [
+                    'id' => $coWheelLocation->getId(),
+                    'name' => $coWheelLocation->getName(),
+                    'lat' => $coWheelLocation->getLat(),
+                    'lng' => $coWheelLocation->getLng()
+                ]
+            );
+            $coWheelsCollection->addResource('coWheels', $resource);
         }
 
         $response = new Response();
         $response->headers->set('Content-Type', 'application/hal+json');
-        $response->setContent($taxiRankCollection->asJson(true));
+        $response->setContent($coWheelsCollection->asJson(true));
         return $response;
     }
 
