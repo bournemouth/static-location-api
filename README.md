@@ -2,7 +2,7 @@
 Based on HAL JSON resources http://stateless.co/hal_specification.html
 
 # API Access
-Available at [bmth-loc-api.vdtapp.com](http://bmth-loc-api.vdtapp.com/)
+Available at [bmth-loc-api.vdtapp.com](https://bmth-loc-api.vdtapp.com/)
 
 # Contents
 * Taxi Rank data, from [bournemouthdata.io](http://bournemouthdata.io/#Transport)
